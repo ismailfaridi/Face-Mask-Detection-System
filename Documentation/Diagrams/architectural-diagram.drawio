@@ -1,0 +1,58 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36" version="29.3.2">
+  <diagram name="Page-1" id="7HWM9l8sNuI86jmKSniE">
+    <mxGraphModel dx="1130" dy="680" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2336" pageHeight="1654" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="SFu5zUXdSA8E6O8UB2YZ-1" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="User/Admin" vertex="1">
+          <mxGeometry height="60" width="30" x="233" y="49" as="geometry" />
+        </mxCell>
+        <mxCell id="SFu5zUXdSA8E6O8UB2YZ-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=light-dark(#e7e7e7, #1a1a1a);fontColor=light-dark(#000000, #c1c1c1);strokeColor=light-dark(#000000, #959595);" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;b&gt;Presentation Layer&lt;/b&gt;&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;(&lt;b&gt;Web App:&lt;/b&gt;&amp;nbsp;HTML, CSS, JS)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;(&lt;b&gt;Desktop App:&lt;/b&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; font-size: 12px;&quot;&gt;Tkinter / PyQt)&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="205" x="145.5" y="199" as="geometry" />
+        </mxCell>
+        <mxCell id="SFu5zUXdSA8E6O8UB2YZ-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=light-dark(#e7e7e7, #ededed);" value="&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;b&gt;Business Layer&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;(Flask / Django, OpenCV,&lt;/div&gt;&lt;div&gt;TensorFlow / Keras / PyTorch)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="205" x="145.5" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="SFu5zUXdSA8E6O8UB2YZ-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=light-dark(#e7e7e7, #ededed);" value="&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;b&gt;Data Layer&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;(&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;MySQL&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;/ SQLite)&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="205" x="145" y="501" as="geometry" />
+        </mxCell>
+        <mxCell id="SFu5zUXdSA8E6O8UB2YZ-7" edge="1" parent="1" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="202" y="136" as="sourcePoint" />
+            <mxPoint x="202" y="191" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SFu5zUXdSA8E6O8UB2YZ-8" edge="1" parent="1" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="294" y="191" as="sourcePoint" />
+            <mxPoint x="294" y="136" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SFu5zUXdSA8E6O8UB2YZ-11" edge="1" parent="1" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="202" y="438" as="sourcePoint" />
+            <mxPoint x="202" y="493" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SFu5zUXdSA8E6O8UB2YZ-12" edge="1" parent="1" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="294" y="493" as="sourcePoint" />
+            <mxPoint x="294" y="438" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SFu5zUXdSA8E6O8UB2YZ-13" edge="1" parent="1" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="202" y="287" as="sourcePoint" />
+            <mxPoint x="202" y="342" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SFu5zUXdSA8E6O8UB2YZ-14" edge="1" parent="1" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="294" y="342" as="sourcePoint" />
+            <mxPoint x="294" y="287" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

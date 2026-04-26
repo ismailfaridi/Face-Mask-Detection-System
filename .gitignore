@@ -1,4 +1,8 @@
 CS619 - Final Project
-dataset
-face_mask_detector.keras
-fmds
+myenv/
+__pycache__/
+.env
+
+
+app/services/blaze_face_full_range.tflite
+app/services/face_mask_detector_mobile-net-v2_model.keras

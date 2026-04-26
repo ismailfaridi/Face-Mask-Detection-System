@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex flex-col items-center justify-center min-h-[60vh]">
+    <div class="glass-card w-full max-w-4xl p-8 rounded-3xl relative overflow-hidden text-center">
+        <h2 class="text-3xl font-bold mb-6">Upload Image</h2>
+        
+        {% if result_image %}
+            <div class="mt-8 mb-8 inline-block shadow-2xl rounded-2xl overflow-hidden relative">
+                <img src="data:image/jpeg;base64,{{ result_image }}" class="max-h-[600px] object-contain rounded-2xl">
+            </div>
+            <div class="flex gap-4 justify-center items-center mb-6">
+                <span class="px-4 py-2 rounded-full font-bold shadow-sm 
+                    {% if status == 'Mask' %} bg-green-100 text-green-700 {% else %} bg-red-100 text-red-700 {% endif %}">
+                    Status: {{ status }}
+                </span>
+                <span class="px-4 py-2 rounded-full bg-gray-100 text-gray-700 font-mediumshadow-sm">
+                    Confidence: {{ "%.2f"|format(confidence) }}%
+                </span>
+            </div>
+            
+            <a href="{{ url_for('main.upload') }}" class="text-blue-600 hover:text-blue-800 font-medium underline underline-offset-4">Upload Another</a>
+        {% else %}
+            <form action="{{ url_for('main.upload') }}" method="POST" enctype="multipart/form-data" class="flex flex-col items-center">
+                <label for="file-upload" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 mb-6 transition">
+                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                        <svg class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                        <p class="mb-2 text-sm text-gray-500 font-semibold">Click to upload or drag and drop</p>
+                        <p class="text-xs text-gray-500">PNG, JPG or JPEG (MAX. 5MB)</p>
+                    </div>
+                    <input id="file-upload" type="file" name="file" class="hidden" accept="image/*" required />
+                </label>
+                <!-- Submit inside label block dynamically shown info -->
+                <p id="file-name" class="text-sm font-medium text-gray-700 mb-4 h-5"></p>
+                
+                <button type="submit" class="bg-black text-white px-8 py-3 rounded-full hover:bg-gray-800 transition transform hover:scale-105 active:scale-95 shadow-lg w-full max-w-sm font-bold text-lg">
+                    Detect Mask
+                </button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    const fileUpload = document.getElementById('file-upload');
+    const fileName = document.getElementById('file-name');
+    if(fileUpload){
+        fileUpload.addEventListener('change', (e) => {
+            if(e.target.files.length > 0){
+                fileName.textContent = 'Selected: ' + e.target.files[0].name;
+            } else {
+                fileName.textContent = '';
+            }
+        });
+    }
+</script>
+{% endblock %}

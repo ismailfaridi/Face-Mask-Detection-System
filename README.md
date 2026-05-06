@@ -49,7 +49,32 @@ Face-Mask-Detection-System/
 ├── .env                         # Environment variables (not committed)
 ├── .gitignore                   # Git ignore rules
 └── README.md                    # Project documentation
-```
+---
+
+## 🛠️ Database Management
+
+The system uses SQLite, and the database file is located at `instance/detection.db`.
+
+### How to open the database
+1.  **VS Code**: Install the "SQLite Viewer" or "SQLite" extension. Right-click `instance/detection.db` and select "Open with...".
+2.  **External Tool**: Use [DB Browser for SQLite](https://sqlitebrowser.org/) to view and edit the database with a user-friendly interface.
+3.  **Command Line**: Run `sqlite3 instance/detection.db` (requires SQLite CLI installed).
+
+### Common SQL Queries
+To manage your records, you can run the following SQL queries inside your database tool:
+
+*   **Remove a specific record**:
+    ```sql
+    DELETE FROM DETECTION WHERE id = [ID_NUMBER];
+    ```
+*   **Remove all records**:
+    ```sql
+    DELETE FROM DETECTION;
+    ```
+*   **Reset the ID counter (after deleting all records)**:
+    ```sql
+    DELETE FROM sqlite_sequence WHERE name='DETECTION';
+    ```
 
 ---
 

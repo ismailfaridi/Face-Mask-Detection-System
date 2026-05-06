@@ -1,18 +1,40 @@
 import sqlite3
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 class DatabaseManager:
+    """
+    Handles all interactions with the SQLite database, including initialization,
+    storing detection records, and retrieving statistics.
+    """
     def __init__(self):
+        """
+        Initializes the DatabaseManager by setting the database path and ensuring
+        the database schema exists.
+        """
         # Default to instance/detection.db to keep database outside app/templates/static folders
         self.db_path = os.getenv('DB_NAME', os.path.join('instance', 'detection.db'))
         self._init_db()
 
     def get_connection(self):
+        """
+        Establishes and returns a connection to the SQLite database.
+        
+        Returns:
+            sqlite3.Connection: A database connection with Row factory enabled.
+        """
         conn = sqlite3.connect(self.db_path)
         conn.row_factory = sqlite3.Row
         return conn
 
     def _init_db(self):
+        """
+        Private method to initialize the database tables and create a default 
+        admin user if they don't already exist.
+        """
         conn = self.get_connection()
         cursor = conn.cursor()
         
@@ -43,6 +65,18 @@ class DatabaseManager:
         conn.close()
 
     def storeRecord(self, mask_status, confidence_score, image_path, media_source):
+        """
+        Stores a face mask detection record in the database.
+        
+        Args:
+            mask_status (str): The status ('Mask' or 'No Mask').
+            confidence_score (float): The detection confidence score.
+            image_path (str): The path or identifier for the associated image.
+            media_source (str): The source of the image (e.g., 'Webcam', 'Upload').
+            
+        Returns:
+            bool: True if storage was successful, False otherwise.
+        """
         try:
             conn = self.get_connection()
             cursor = conn.cursor()
@@ -57,6 +91,12 @@ class DatabaseManager:
             return False
 
     def getAllRecords(self):
+        """
+        Retrieves all detection records from the database, ordered by timestamp.
+        
+        Returns:
+            list: A list of dictionaries representing each detection record.
+        """
         try:
             conn = self.get_connection()
             cursor = conn.cursor()
@@ -69,7 +109,35 @@ class DatabaseManager:
             print(f"DB Error getAllRecords: {e}")
             return []
 
+    def getRecentRecords(self, limit=50):
+        """
+        Retrieves the most recent detection records up to a specified limit.
+        
+        Args:
+            limit (int): The maximum number of records to retrieve. Defaults to 50.
+            
+        Returns:
+            list: A list of dictionaries representing the recent detection records.
+        """
+        try:
+            conn = self.get_connection()
+            cursor = conn.cursor()
+            sql = f"SELECT * FROM DETECTION ORDER BY timestamp DESC LIMIT {limit}"
+            cursor.execute(sql)
+            result = [dict(row) for row in cursor.fetchall()]
+            conn.close()
+            return result
+        except Exception as e:
+            print(f"DB Error getRecentRecords: {e}")
+            return []
+
     def getStatistics(self):
+        """
+        Calculates total detection counts for statistics visualization.
+        
+        Returns:
+            dict: A dictionary containing 'mask' and 'no_mask' counts.
+        """
         try:
             conn = self.get_connection()
             cursor = conn.cursor()
@@ -88,11 +156,24 @@ class DatabaseManager:
             return {'mask': 0, 'no_mask': 0}
 
 class Admin:
+    """
+    Represents an administrative user and provides methods for authentication.
+    """
     def __init__(self, username):
         self.username = username
         self.db = DatabaseManager()
 
     def login(self, username, password):
+        """
+        Authenticates an administrator using their username and password.
+        
+        Args:
+            username (str): The admin username.
+            password (str): The admin password.
+            
+        Returns:
+            bool: True if credentials are valid, False otherwise.
+        """
         try:
             conn = self.db.get_connection()
             cursor = conn.cursor()

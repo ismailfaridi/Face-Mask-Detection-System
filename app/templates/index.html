@@ -5,7 +5,8 @@
     <!-- Hero Section -->
     <div class="text-center mb-12 md:mb-20 max-w-3xl">
         <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-4">
-            <span class="bg-gradient-to-r from-green-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">Face Mask Detector</span>
+            <span class="bg-gradient-to-r from-green-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">Face
+                Mask Detector</span>
         </h1>
         <p class="text-lg md:text-xl text-gray-600">Powered by MediaPipe & MobileNetV2</p>
     </div>
@@ -13,10 +14,14 @@
     <!-- Action Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl mb-16">
         <!-- Upload Card -->
-        <a href="{{ url_for('main.upload') }}" class="glass-card group hover:-translate-y-2 transition duration-300 p-10 flex flex-col items-center justify-center text-center rounded-3xl cursor-pointer min-h-[320px]">
-            <div class="w-20 h-20 mb-4 rounded-2xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white group-hover:scale-110 transition duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-10 h-10">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+        <a href="{{ url_for('main.upload') }}"
+            class="glass-card group hover:-translate-y-2 transition duration-300 p-10 flex flex-col items-center justify-center text-center rounded-3xl cursor-pointer min-h-[320px]">
+            <div
+                class="w-20 h-20 mb-4 rounded-2xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white group-hover:scale-110 transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                    stroke="currentColor" class="w-10 h-10">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                 </svg>
             </div>
             <h2 class="text-2xl font-bold text-gray-900 mb-2">Upload Image</h2>
@@ -24,14 +29,19 @@
         </a>
 
         <!-- Webcam Card -->
-        <a href="{{ url_for('main.webcam') }}" class="glass-card group hover:-translate-y-2 transition duration-300 p-10 flex flex-col items-center justify-center text-center rounded-3xl cursor-pointer min-h-[320px]">
-            <div class="w-20 h-20 mb-4 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white group-hover:scale-110 transition duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-10 h-10">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
+        <a href="{{ url_for('main.webcam') }}"
+            class="glass-card group hover:-translate-y-2 transition duration-300 p-10 flex flex-col items-center justify-center text-center rounded-3xl cursor-pointer min-h-[320px]">
+            <div
+                class="w-20 h-20 mb-4 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white group-hover:scale-110 transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                    stroke="currentColor" class="w-10 h-10">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
                 </svg>
             </div>
-            <h2 class="text-2xl font-bold text-gray-900 mb-2">Real-Time Stream</h2>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Real-Time Detection</h2>
             <p class="text-base text-gray-600">Use your webcam</p>
         </a>
     </div>
@@ -39,25 +49,31 @@
     <!-- How it Works Section -->
     <div class="w-full max-w-3xl">
         <h2 class="text-4xl font-bold text-gray-900 text-center mb-12">How It Works</h2>
-        
+
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
             <!-- Step 1 -->
             <div class="glass-card p-8 rounded-2xl text-center">
-                <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-green-400 to-green-600 text-white font-bold text-xl mb-4">1</div>
+                <div
+                    class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-green-400 to-green-600 text-white font-bold text-xl mb-4">
+                    1</div>
                 <h3 class="text-lg font-bold text-gray-900 mb-3">Face Detection</h3>
                 <p class="text-gray-600 text-sm">MediaPipe detects faces in real-time with high accuracy</p>
             </div>
 
             <!-- Step 2 -->
             <div class="glass-card p-8 rounded-2xl text-center">
-                <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 text-white font-bold text-xl mb-4">2</div>
+                <div
+                    class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 text-white font-bold text-xl mb-4">
+                    2</div>
                 <h3 class="text-lg font-bold text-gray-900 mb-3">Extract & Normalize</h3>
                 <p class="text-gray-600 text-sm">Faces are cropped and prepared for classification</p>
             </div>
 
             <!-- Step 3 -->
             <div class="glass-card p-8 rounded-2xl text-center">
-                <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 text-white font-bold text-xl mb-4">3</div>
+                <div
+                    class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 text-white font-bold text-xl mb-4">
+                    3</div>
                 <h3 class="text-lg font-bold text-gray-900 mb-3">Mask Classification</h3>
                 <p class="text-gray-600 text-sm">MobileNetV2 determines mask status instantly</p>
             </div>
@@ -69,7 +85,9 @@
             <ul class="space-y-4">
                 <li class="flex items-start gap-3">
                     <svg class="w-6 h-6 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clip-rule="evenodd" />
                     </svg>
                     <div>
                         <p class="font-semibold text-gray-900">Real-Time Processing</p>
@@ -78,7 +96,9 @@
                 </li>
                 <li class="flex items-start gap-3">
                     <svg class="w-6 h-6 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clip-rule="evenodd" />
                     </svg>
                     <div>
                         <p class="font-semibold text-gray-900">High Accuracy</p>
@@ -87,7 +107,9 @@
                 </li>
                 <li class="flex items-start gap-3">
                     <svg class="w-6 h-6 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clip-rule="evenodd" />
                     </svg>
                     <div>
                         <p class="font-semibold text-gray-900">Lightweight Model</p>

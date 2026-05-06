@@ -1,240 +1,241 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk # Used to bridge OpenCV images with Tkinter widgets
 import cv2
 import os
 import sys
+import time
 
 # Ensure root directory is in sys.path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from app.services.detector import DetectionSystem
 
-# Modern Color Palette
+# Minimalist Color Palette
 COLORS = {
-    "sidebar_bg": "#F8F9FA",
-    "main_bg": "#FFFFFF",
+    "bg": "#FFFFFF",
+    "header_bg": "#F8F9FA",
     "primary": "#1A73E8",
     "primary_hover": "#E8F0FE",
-    "success": "#34A853",
-    "danger": "#D93025",
-    "text_main": "#202124",
+    "text": "#202124",
     "text_secondary": "#5F6368",
-    "border": "#DADCE0"
+    "border": "#DADCE0",
+    "success": "#34A853",
+    "danger": "#D93025"
 }
 
 class FaceMaskApp:
+    """
+    A Tkinter-based desktop application for real-time face mask detection.
+    Supports both static image analysis and live webcam monitoring.
+    """
     def __init__(self, root):
         self.root = root
-        self.root.title("Face Mask Detection System")
-        self.root.geometry("1280x720")
-        self.root.configure(bg=COLORS["main_bg"])
+        self.root.title("Face Mask Detector")
+        self.root.geometry("1100x800")
+        self.root.configure(bg=COLORS["bg"])
 
         self.detector = DetectionSystem()
         self.is_camera_on = False
         
         self.create_layout()
-        self.show_image_mode() # Set Image Mode as Default
+        self.show_image_mode()
 
     def create_layout(self):
-        # 1. SIDEBAR
-        self.sidebar = tk.Frame(self.root, bg=COLORS["sidebar_bg"], width=260, highlightbackground=COLORS["border"], highlightthickness=1)
-        self.sidebar.pack(side="left", fill="y")
-        self.sidebar.pack_propagate(False)
+        """
+        Initializes the application layout, including the navigation header,
+        main viewport, and bottom status bar.
+        """
+        # 1. TOP HEADER (Navigation)
+        self.header = tk.Frame(self.root, bg=COLORS["header_bg"], height=70, highlightbackground=COLORS["border"], highlightthickness=1)
+        self.header.pack(side="top", fill="x")
+        self.header.pack_propagate(False)
 
-        # Sidebar Title
-        tk.Label(self.sidebar, text="FACE MASK\nDETECTION", font=("Product Sans", 18, "bold"), 
-                 bg=COLORS["sidebar_bg"], fg=COLORS["primary"], pady=40).pack()
+        # Title on Left
+        tk.Label(self.header, text="Face Mask Detector", font=("Product Sans", 14, "bold"), 
+                 bg=COLORS["header_bg"], fg=COLORS["primary"], padx=20).pack(side="left")
 
-        # Sidebar Buttons
-        self.img_btn = tk.Button(self.sidebar, text="📁  Image Upload", font=("Roboto", 11, "bold"),
-                                bg=COLORS["sidebar_bg"], fg=COLORS["text_secondary"], relief="flat", 
-                                padx=20, pady=15, anchor="w", cursor="hand2", command=self.show_image_mode)
-        self.img_btn.pack(fill="x", padx=10, pady=5)
+        # Nav Buttons Container
+        nav_container = tk.Frame(self.header, bg=COLORS["header_bg"])
+        nav_container.pack(side="right", padx=20)
 
-        self.cam_btn_nav = tk.Button(self.sidebar, text="📷  Live Detection", font=("Roboto", 11, "bold"),
-                                bg=COLORS["sidebar_bg"], fg=COLORS["text_secondary"], relief="flat", 
-                                padx=20, pady=15, anchor="w", cursor="hand2", command=self.show_camera_mode)
-        self.cam_btn_nav.pack(fill="x", padx=10, pady=5)
+        self.img_btn = tk.Button(nav_container, text="Image Analysis", font=("Roboto", 10, "bold"),
+                                bg=COLORS["header_bg"], fg=COLORS["text_secondary"], relief="flat", 
+                                padx=20, pady=10, cursor="hand2", command=self.show_image_mode)
+        self.img_btn.pack(side="left", padx=5)
 
-        # 2. MAIN CONTENT AREA
-        self.content_area = tk.Frame(self.root, bg=COLORS["main_bg"])
-        self.content_area.pack(side="right", expand=True, fill="both")
+        self.cam_btn = tk.Button(nav_container, text="Live Webcam", font=("Roboto", 10, "bold"),
+                                bg=COLORS["header_bg"], fg=COLORS["text_secondary"], relief="flat", 
+                                padx=20, pady=10, cursor="hand2", command=self.show_camera_mode)
+        self.cam_btn.pack(side="left", padx=5)
+
+        # 2. MAIN VIEWPORT
+        self.content_area = tk.Frame(self.root, bg=COLORS["bg"])
+        self.content_area.pack(expand=True, fill="both", padx=30, pady=20)
         
+        # 3. STATS BAR (BOTTOM)
+        self.stats_bar = tk.Frame(self.root, bg=COLORS["header_bg"], height=50, highlightbackground=COLORS["border"], highlightthickness=1)
+        self.stats_bar.pack(side="bottom", fill="x")
+        self.stats_bar.pack_propagate(False)
+
+        self.stats_lbl = tk.Label(self.stats_bar, text="Ready to scan", font=("Roboto", 10, "bold"),
+                                 bg=COLORS["header_bg"], fg=COLORS["text_secondary"])
+        self.stats_lbl.pack(expand=True)
+
         self.current_frame = None
 
-    def update_sidebar_selection(self, active_btn):
-        # Reset all
-        for btn in [self.img_btn, self.cam_btn_nav]:
-            btn.configure(bg=COLORS["sidebar_bg"], fg=COLORS["text_secondary"])
+    def update_nav(self, active_btn):
+        """
+        Updates the UI state of the navigation buttons to highlight the active mode.
         
-        # Highlight active
+        Args:
+            active_btn (tk.Button): The button representing the current active mode.
+        """
+        for btn in [self.img_btn, self.cam_btn]:
+            btn.configure(bg=COLORS["header_bg"], fg=COLORS["text_secondary"])
         active_btn.configure(bg=COLORS["primary_hover"], fg=COLORS["primary"])
 
     def clear_content(self):
+        """
+        Cleans up the main viewport and stops the camera if it's currently running.
+        """
         if self.is_camera_on:
             self.stop_camera()
         if self.current_frame:
             self.current_frame.destroy()
 
     def show_image_mode(self):
+        """
+        Configures the UI for the static image analysis mode.
+        """
         self.clear_content()
-        self.update_sidebar_selection(self.img_btn)
+        self.update_nav(self.img_btn)
         
-        self.current_frame = tk.Frame(self.content_area, bg=COLORS["main_bg"])
-        self.current_frame.pack(expand=True, fill="both", padx=40, pady=40)
+        self.current_frame = tk.Frame(self.content_area, bg=COLORS["bg"])
+        self.current_frame.pack(expand=True, fill="both")
         
-        # Title
-        tk.Label(self.current_frame, text="Analyze Image", font=("Product Sans", 22, "bold"), 
-                 bg=COLORS["main_bg"], fg=COLORS["text_main"]).pack(anchor="w", pady=(0, 30))
+        # Upload Button
+        tk.Button(self.current_frame, text="Select Image", bg=COLORS["primary"], fg="white", 
+                  font=("Roboto", 10, "bold"), relief="flat", padx=30, pady=12, 
+                  command=self.handle_upload).pack(pady=(0, 20))
 
-        # Upload Area
-        self.upload_area = tk.Frame(self.current_frame, bg=COLORS["sidebar_bg"], highlightbackground=COLORS["border"], highlightthickness=1)
-        self.upload_area.pack(expand=True, fill="both")
-
-        # Controls in Upload Area
-        controls = tk.Frame(self.upload_area, bg=COLORS["sidebar_bg"], pady=20)
-        controls.pack(fill="x", padx=20)
-        
-        tk.Button(controls, text="Select Image to Detect", bg=COLORS["primary"], fg="white", 
-                  font=("Roboto", 11, "bold"), relief="flat", padx=25, pady=10, 
-                  command=self.handle_upload).pack(side="left")
-        
-        self.filename_lbl = tk.Label(controls, text="No file selected", bg=COLORS["sidebar_bg"], 
-                                     fg=COLORS["text_secondary"], font=("Roboto", 10))
-        self.filename_lbl.pack(side="left", padx=20)
-
-        # Image Display
-        self.img_display = tk.Label(self.upload_area, text="Please upload an image to begin", 
-                                    bg=COLORS["sidebar_bg"], fg=COLORS["text_secondary"], font=("Roboto", 14))
-        self.img_display.pack(expand=True, fill="both", padx=20, pady=(0, 20))
-        
-        # Bottom Result Bar
-        self.result_box = tk.Frame(self.upload_area, bg="#EEEEEE", height=70)
-        self.result_box.pack(side="bottom", fill="x")
-        self.result_lbl = tk.Label(self.result_box, text="DETECTION STATUS: PENDING", bg="#EEEEEE", 
-                                   fg=COLORS["text_secondary"], font=("Roboto", 13, "bold"))
-        self.result_lbl.pack(pady=22)
+        # Image Display Area
+        self.display = tk.Label(self.current_frame, text="No image selected", 
+                               bg="#F1F3F4", fg=COLORS["text_secondary"], font=("Roboto", 12),
+                               highlightbackground=COLORS["border"], highlightthickness=1)
+        self.display.pack(expand=True, fill="both")
 
     def show_camera_mode(self):
+        """
+        Configures the UI for the real-time camera monitoring mode.
+        """
         self.clear_content()
-        self.update_sidebar_selection(self.cam_btn_nav)
+        self.update_nav(self.cam_btn)
         
-        self.current_frame = tk.Frame(self.content_area, bg=COLORS["main_bg"])
-        self.current_frame.pack(expand=True, fill="both", padx=40, pady=40)
-        
-        # Title
-        tk.Label(self.current_frame, text="Real-time Detection", font=("Product Sans", 22, "bold"), 
-                 bg=COLORS["main_bg"], fg=COLORS["text_main"]).pack(anchor="w", pady=(0, 30))
+        self.current_frame = tk.Frame(self.content_area, bg=COLORS["bg"])
+        self.current_frame.pack(expand=True, fill="both")
 
-        # Main View
-        self.view_container = tk.Frame(self.current_frame, bg=COLORS["main_bg"])
-        self.view_container.pack(expand=True, fill="both")
+        # Camera Display
+        self.display = tk.Label(self.current_frame, text="Camera Offline", 
+                               bg="black", fg="#5F6368", font=("Roboto", 14),
+                               highlightbackground=COLORS["border"], highlightthickness=1)
+        self.display.pack(expand=True, fill="both", pady=(0, 20))
 
-        # Video
-        video_wrap = tk.Frame(self.view_container, bg="black", highlightbackground=COLORS["border"], highlightthickness=1)
-        video_wrap.pack(side="left", expand=True, fill="both")
-        
-        self.video_lbl = tk.Label(video_wrap, text="Camera Offline", bg="black", fg="#5F6368", font=("Roboto", 16))
-        self.video_lbl.pack(expand=True, fill="both")
-        
-        # Right Control Panel
-        panel = tk.Frame(self.view_container, bg=COLORS["main_bg"], width=300)
-        panel.pack(side="right", fill="y", padx=(30, 0))
-        
-        self.cam_toggle_btn = tk.Button(panel, text="START SCANNER", bg=COLORS["success"], fg="white", 
-                                 font=("Roboto", 11, "bold"), relief="flat", padx=20, pady=15, 
-                                 command=self.toggle_camera)
-        self.cam_toggle_btn.pack(fill="x", pady=(0, 30))
-        
-        # Detection Card
-        card = tk.Frame(panel, bg=COLORS["sidebar_bg"], highlightbackground=COLORS["border"], highlightthickness=1, padx=25, pady=30)
-        card.pack(fill="x")
-        
-        tk.Label(card, text="LIVE STATUS", bg=COLORS["sidebar_bg"], fg=COLORS["text_secondary"], font=("Roboto", 9, "bold")).pack()
-        self.cam_status = tk.Label(card, text="READY", bg=COLORS["sidebar_bg"], fg=COLORS["text_main"], font=("Roboto", 24, "bold"))
-        self.cam_status.pack(pady=15)
-        self.cam_conf = tk.Label(card, text="-", bg=COLORS["sidebar_bg"], fg=COLORS["text_secondary"], font=("Roboto", 13))
-        self.cam_conf.pack()
+        # Toggle Button
+        self.toggle_btn = tk.Button(self.current_frame, text="Start Camera", bg=COLORS["success"], fg="white", 
+                                   font=("Roboto", 10, "bold"), relief="flat", padx=40, pady=12, 
+                                   command=self.toggle_camera)
+        self.toggle_btn.pack()
 
     def handle_upload(self):
+        """
+        Opens a file dialog to select an image, processes it for face mask detection,
+        and displays the annotated result.
+        """
         path = filedialog.askopenfilename(filetypes=[("Image Files", "*.jpg *.png *.jpeg")])
         if not path: return
         
-        self.filename_lbl.configure(text=os.path.basename(path))
         img = cv2.imread(path)
         if img is None: return
         
-        annotated, status, conf, found = self.detector.processFrame(img)
+        annotated, status, conf, face_results = self.detector.processFrame(img)
+        self.detector.save_results(img, face_results, "Image Upload")
         
-        # Update UI
-        if status == "No Face":
-            color = "#EEEEEE"
-            self.result_box.configure(bg=color)
-            self.result_lbl.configure(text="NO FACES DETECTED", bg=color, fg=COLORS["text_secondary"])
-        else:
-            color = COLORS["success"] if status == "Mask" else COLORS["danger"]
-            self.result_box.configure(bg=color)
-            # If multiple faces were found, it might be more accurate to say 'Scan Complete' 
-            # especially if there's a mix of mask/no-mask
-            display_status = status.upper() if status == "Mask" else "NO MASK DETECTED"
-            self.result_lbl.configure(text=f"DETECTED: {display_status} ({conf:.1f}%)", bg=color, fg="white")
+        # Stats
+        total = len(face_results)
+        masks = sum(1 for _, l, _ in face_results if l == "Mask")
+        self.stats_lbl.configure(text=f"Faces Found: {total} | Masks Detected: {masks} | Status: {status.upper()}", fg=COLORS["primary"])
         
-        # Show Image
-        rgb = cv2.cvtColor(annotated, cv2.COLOR_BGR2RGB)
-        pil_img = Image.fromarray(rgb)
-        
-        w, h = self.img_display.winfo_width(), self.img_display.winfo_height()
-        if w > 10 and h > 10:
-            pil_img.thumbnail((w, h))
-        
-        tk_img = ImageTk.PhotoImage(pil_img)
-        self.img_display.configure(image=tk_img, text="")
-        self.img_display.image = tk_img
+        # Show
+        self.update_display(annotated)
 
     def toggle_camera(self):
+        """
+        Starts or stops the live webcam feed based on the current state.
+        """
         if not self.is_camera_on:
             self.is_camera_on = True
-            self.cam_toggle_btn.configure(text="STOP SCANNER", bg=COLORS["danger"])
+            self.toggle_btn.configure(text="Stop Camera", bg=COLORS["danger"])
             self.detector.startRealTimeDetection()
             self.update_video()
         else:
             self.stop_camera()
 
     def stop_camera(self):
+        """
+        Safely stops the camera feed and updates the UI to an offline state.
+        """
         self.is_camera_on = False
-        self.cam_toggle_btn.configure(text="START SCANNER", bg=COLORS["success"])
-        self.cam_status.configure(text="READY", fg=COLORS["text_main"])
-        self.cam_conf.configure(text="-")
-        self.video_lbl.configure(image="", text="Camera Offline")
+        if hasattr(self, 'toggle_btn'):
+            self.toggle_btn.configure(text="Start Camera", bg=COLORS["success"])
+        self.stats_lbl.configure(text="Camera Stopped", fg=COLORS["text_secondary"])
+        self.display.configure(image="", text="Camera Offline")
         self.detector.cameraManager.stopCamera()
 
     def update_video(self):
+        """
+        Continuously captures frames from the webcam, processes them, and 
+        updates the display in a loop using the Tkinter event loop.
+        """
         if self.is_camera_on:
             frame = self.detector.cameraManager.getFrame()
             if frame is not None:
-                annotated, status, conf, found = self.detector.processFrame(frame)
+                annotated, status, conf, face_results = self.detector.processFrame(frame)
                 
-                if status == "No Face":
-                    self.cam_status.configure(text="SCANNING...", fg=COLORS["text_secondary"])
-                    self.cam_conf.configure(text="No faces detected")
-                else:
-                    color = COLORS["success"] if status == "Mask" else COLORS["danger"]
-                    self.cam_status.configure(text=status.upper(), fg=color)
-                    self.cam_conf.configure(text=f"Confidence: {conf:.1f}%")
+                # Auto-save logic
+                current_time = time.time()
+                if face_results and (current_time - self.detector.last_db_save_time > 5):
+                    self.detector.last_db_save_time = current_time
+                    self.detector.save_results(frame, face_results, "Live Camera")
                 
-                rgb = cv2.cvtColor(annotated, cv2.COLOR_BGR2RGB)
-                pil_img = Image.fromarray(rgb)
+                # Update Stats
+                total = len(face_results)
+                masks = sum(1 for _, l, _ in face_results if l == "Mask")
+                self.stats_lbl.configure(text=f"Live Stats - Faces: {total} | Masks: {masks} | Status: {status.upper()}", fg=COLORS["primary"])
                 
-                w, h = self.video_lbl.winfo_width(), self.video_lbl.winfo_height()
-                if w > 10 and h > 10:
-                    pil_img.thumbnail((w, h))
-                
-                tk_img = ImageTk.PhotoImage(pil_img)
-                self.video_lbl.configure(image=tk_img)
-                self.video_lbl.image = tk_img
+                self.update_display(annotated)
             
             self.root.after(10, self.update_video)
+
+    def update_display(self, frame):
+        """
+        Converts a BGR image array into a format compatible with Tkinter
+        and updates the central display widget.
+        
+        Args:
+            frame (numpy.ndarray): The BGR image frame to display.
+        """
+        rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        pil_img = Image.fromarray(rgb)
+        
+        # Dynamic resizing to fit display area
+        w, h = self.display.winfo_width(), self.display.winfo_height()
+        if w > 10 and h > 10:
+            pil_img.thumbnail((w, h))
+        
+        tk_img = ImageTk.PhotoImage(pil_img)
+        self.display.configure(image=tk_img, text="")
+        self.display.image = tk_img
 
 if __name__ == "__main__":
     root = tk.Tk()

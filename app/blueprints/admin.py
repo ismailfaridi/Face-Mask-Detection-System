@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, session
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from app.models.db import Admin, DatabaseManager
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
@@ -37,7 +37,7 @@ def logout():
     Returns:
         Response: Redirects to the main index page.
     """
-    session.clear()
+    session.clear() # clears all data stored in the session
     flash('Logged out successfully.', 'success')
     return redirect(url_for('main.index'))
 
@@ -48,15 +48,17 @@ def dashboard():
     Requires the administrator to be logged in.
     
     Returns:
-        str: Rendered HTML for the admin dashboard or a redirect to login.
+        str: Rendered HTML for the admin dashboard or a redirect to login page.
     """
     if session.get('admin_logged_in') is None:
         return redirect(url_for('admin.login'))
+    
     db = DatabaseManager()
     stats = db.getStatistics()
     all_records = db.getAllRecords()
     recent_records = db.getRecentRecords(50)
-    return render_template('dashboard.html', 
-                         stats=stats, 
-                         all_records=all_records, 
-                         recent_records=recent_records)
+
+    return render_template('dashboard.html',
+                           stats=stats,
+                           all_records=all_records,
+                           recent_records=recent_records)

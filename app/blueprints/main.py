@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, Response, flash, redirect, url_for
+from flask import Blueprint, render_template, Response, redirect, request, url_for, flash
 from app.services.detector import DetectionSystem
 import base64 # For encoding processed images for HTML display
 
@@ -80,6 +80,7 @@ def gen_frames():
     """
     system = detector_system
     system.startRealTimeDetection()
+    
     try:
         while True:
             frame_bytes = system.get_realtime_frame()

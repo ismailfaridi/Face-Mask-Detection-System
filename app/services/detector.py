@@ -175,18 +175,19 @@ class DetectionSystem:
         Crops a face ROI from a frame, saves it to disk, and records it in the database.
         
         Args:
-            frame (numpy.ndarray): The full image frame.
-            xmin, ymin, xmax, ymax (int): Bounding box coordinates.
-            label (str): Classification label ('Mask' or 'No Mask').
-            conf (float): Confidence score.
-            source (str): Source identifier for the record.
+            frame (numpy.ndarray):          The full image frame.
+            xmin, ymin, xmax, ymax (int):   Bounding box coordinates.
+            label (str):                    Classification label ('Mask' or 'No Mask').
+            conf (float):                   Confidence score.
+            source (str):                   Source identifier for the record.
             
         Returns:
             str: Relative database path to the saved image, or None if ROI was empty.
         """
         # Crop ROI
         roi = frame[ymin:ymax, xmin:xmax]
-        if roi.size == 0: return None
+        if roi.size == 0:
+            return None
         
         output_filename = f"{uuid.uuid4().hex}.jpg"
         folder = "mask" if label == "Mask" else "no-mask"

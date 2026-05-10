@@ -2,7 +2,6 @@ import sqlite3
 import os
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
 load_dotenv()
 
 class DatabaseManager:
@@ -69,10 +68,10 @@ class DatabaseManager:
         Stores a face mask detection record in the database.
         
         Args:
-            mask_status (str): The status ('Mask' or 'No Mask').
-            confidence_score (float): The detection confidence score.
-            image_path (str): The path or identifier for the associated image.
-            media_source (str): The source of the image (e.g., 'Webcam', 'Upload').
+            mask_status (str):          The status ('Mask' or 'No Mask').
+            confidence_score (float):   The detection confidence score.
+            image_path (str):           The path or identifier for the associated image.
+            media_source (str):         The source of the image (e.g., 'Webcam', 'Upload').
             
         Returns:
             bool: True if storage was successful, False otherwise.

@@ -81,44 +81,28 @@ Face-Mask-Detection-System/
 
 ---
 
-## 📊 Model Training & Performance
+## 📁 Dataset
 
-The face mask classifier is built using transfer learning on **MobileNetV2**. Below is the training performance showing accuracy and loss trends over epochs:
+The classification model was trained and evaluated using a custom dataset compiled and published by **Muhammad Ismail** on Kaggle:
+👉 **[Kaggle: Face Mask Detection Dataset](https://www.kaggle.com/datasets/ismailfaridi/face-mask-detection)**
 
-![MobileNetV2 Training Performance](assets/fmds_mobilenetv2_training_performance.png)
+This dataset is a curated collection that combines image samples from various public sources. It has been consolidated, cleaned, and pre-processed into balanced face crops (with mask and without mask) designed specifically for training high-accuracy classification models.
 
 ---
 
-## 💾 Database Schema
+## 📊 Model Training & Performance
 
-The system stores all logs in a local SQLite database at `instance/detection.db` using two tables:
+The face mask classifier is built using transfer learning on **MobileNetV2** (pre-trained on ImageNet) and fine-tuned on the [Face Mask Detection Dataset](https://www.kaggle.com/datasets/ismailfaridi/face-mask-detection).
 
-### 1. `DETECTION` Table
-Stores records of individual face crops detected by the system.
-```sql
-CREATE TABLE DETECTION (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    mask_status TEXT,              -- "Mask" or "No Mask"
-    confidence_score REAL,         -- Confidence score (0.0 to 100.0)
-    image_path TEXT,               -- Relative path to the cropped face image
-    media_source TEXT,             -- Source ("Image Upload", "Live Camera", etc.)
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-```
+### 📈 Training Curves
+Below is the training performance showing training and validation accuracy and loss trends over 10 epochs:
 
-### 2. `ADMIN` Table
-Stores administrators credentials.
-```sql
-CREATE TABLE ADMIN (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT UNIQUE,
-    password TEXT
-);
-```
-> [NOTE]
-> **Default Admin Credentials:**
-> - **Username**: `admin`
-> - **Password**: `admin`
+![MobileNetV2 Training Performance](assets/fmds_mobilenetv2_training_performance.png)
+
+### 🧪 Evaluation Metrics
+The model was evaluated on a test set of 966 samples (balanced with 483 mask and 483 no-mask samples), achieving outstanding classification results:
+
+![Confusion Matrix & Metrics](assets/confusion-matrix_and_metrics.png)
 
 ---
 
@@ -153,6 +137,14 @@ DB_PASSWORD=admin
 
 ---
 
+## Trained Model
+
+The trained MobileNetV2 model is not included in the repository because it exceeds GitHub's file size limit.
+
+You can download the trained model from the **Releases** section of this repository. After downloading, place the `.keras` model file in the `app/services/` directory.
+
+---
+
 ## ▶️ Running the Applications
  
 ### 🌐 Flask Web Application
@@ -169,6 +161,10 @@ Open your browser at `http://127.0.0.1:5000`
 | `/admin/login` | Admin login |
 | `/admin/dashboard` | Admin analytics dashboard |
 | `/admin/logout` | Admin logout |
+
+> **Default Admin Credentials:**
+> - **Username**: `admin`
+> - **Password**: `admin`
  
 ### 💻 Tkinter Desktop Application
 ```bash

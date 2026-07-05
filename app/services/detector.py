@@ -58,7 +58,7 @@ class FaceDetector:
         return coordinates
 
 
-# Class to handle CNN model loading and prediction
+# Handle CNN model loading and prediction
 class CNNModel:
     """
     Handles the loading and execution of the pre-trained Keras model for 
@@ -107,7 +107,7 @@ class CNNModel:
             
             # Prediction logic - using the same as your working code
             prediction = self.cnnModel.predict(face, verbose=0)[0][0]
-            label = "No Mask" if prediction >= 0.7 else "Mask"
+            label = "No Mask" if prediction >= 0.5 else "Mask"
             conf = prediction if label == "No Mask" else 1 - prediction
             
             predictions.append((label, float(conf * 100)))
@@ -115,7 +115,7 @@ class CNNModel:
         return predictions
 
 
-# Class to manage camera operations
+# Manage camera (webcam) operations
 class CameraManager:
     """
     Manages webcam access and frame acquisition using OpenCV.

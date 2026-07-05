@@ -11,9 +11,6 @@ detector_system = DetectionSystem()
 def index():
     """
     Renders the landing page of the application.
-    
-    Returns:
-        str: Rendered HTML for the index page.
     """
     return render_template('index.html')
 
@@ -24,9 +21,6 @@ def upload():
     
     In POST: Processes the uploaded image and displays detection results.
     In GET: Renders the upload form page.
-    
-    Returns:
-        str: Rendered HTML for the upload page with or without results.
     """
     if request.method == 'POST':
         if 'file' not in request.files:
@@ -64,9 +58,6 @@ def upload():
 def webcam():
     """
     Renders the real-time webcam detection page.
-    
-    Returns:
-        str: Rendered HTML for the webcam monitoring page.
     """
     return render_template('webcam.html')
 

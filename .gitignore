@@ -1,17 +1,5 @@
-CS619 - Final Project
-
-app/services/face_mask_detector_mobile-net-v2_model.keras
-
+Documentation/Other Materials/Dataset.zip
 app/static/uploads/
-
-# Virtual environment
 venv/
-
-# Python cache
 __pycache__/
-
-# Environment variables
-.env
-
-# Instance folder (database & runtime files)
-instance/
+app/services/face_mask_detector_mobile-net-v2_model.keras

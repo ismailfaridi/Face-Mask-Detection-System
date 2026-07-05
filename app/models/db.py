@@ -26,7 +26,7 @@ class DatabaseManager:
             sqlite3.Connection: A database connection with Row factory enabled.
         """
         conn = sqlite3.connect(self.db_path)
-        conn.row_factory = sqlite3.Row
+        conn.row_factory = sqlite3.Row # Enable dictionary-like access to rows
         return conn
 
     def _init_db(self):
@@ -56,9 +56,12 @@ class DatabaseManager:
             )
         ''')
         
-        cursor.execute('SELECT * FROM ADMIN WHERE username="admin"')
+        admin_user = os.getenv('DB_USER', 'admin')
+        admin_pass = os.getenv('DB_PASSWORD', 'admin')
+        
+        cursor.execute('SELECT * FROM ADMIN WHERE username=?', (admin_user,))
         if not cursor.fetchone():
-            cursor.execute('INSERT INTO ADMIN (username, password) VALUES ("admin", "admin")')
+            cursor.execute('INSERT INTO ADMIN (username, password) VALUES (?, ?)', (admin_user, admin_pass))
             
         conn.commit()
         conn.close()
@@ -99,7 +102,7 @@ class DatabaseManager:
         try:
             conn = self.get_connection()
             cursor = conn.cursor()
-            sql = "SELECT * FROM DETECTION ORDER BY timestamp DESC"
+            sql = "SELECT * FROM DETECTION ORDER BY timestamp DESC, id DESC"
             cursor.execute(sql)
             result = [dict(row) for row in cursor.fetchall()]
             conn.close()
@@ -121,7 +124,7 @@ class DatabaseManager:
         try:
             conn = self.get_connection()
             cursor = conn.cursor()
-            sql = f"SELECT * FROM DETECTION ORDER BY timestamp DESC LIMIT {limit}"
+            sql = f"SELECT * FROM DETECTION ORDER BY timestamp DESC, id DESC LIMIT {limit}"
             cursor.execute(sql)
             result = [dict(row) for row in cursor.fetchall()]
             conn.close()
@@ -153,6 +156,37 @@ class DatabaseManager:
         except Exception as e:
             print(f"DB Error getStatistics: {e}")
             return {'mask': 0, 'no_mask': 0}
+
+    def clearAllRecords(self):
+        """
+        Deletes all detection records from the database and removes all uploaded images
+        from the app/static/uploads storage area.
+        """
+        try:
+            conn = self.get_connection()
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM DETECTION")
+            # Reset SQLite auto-increment sequence for the DETECTION table
+            cursor.execute("DELETE FROM sqlite_sequence WHERE name='DETECTION'")
+            conn.commit()
+            conn.close()
+        except Exception as e:
+            print(f"DB Error clearAllRecords: {e}")
+            raise e
+
+        # Delete image files from disk
+        uploads_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'static', 'uploads'))
+        for folder in ['mask', 'no-mask']:
+            folder_path = os.path.join(uploads_dir, folder)
+            if os.path.exists(folder_path):
+                for filename in os.listdir(folder_path):
+                    file_path = os.path.join(folder_path, filename)
+                    try:
+                        if os.path.isfile(file_path):
+                            os.remove(file_path)
+                    except Exception as e:
+                        print(f"Error deleting file {file_path}: {e}")
+
 
 class Admin:
     """

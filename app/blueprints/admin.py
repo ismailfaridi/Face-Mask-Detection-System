@@ -62,3 +62,21 @@ def dashboard():
                            stats=stats,
                            all_records=all_records,
                            recent_records=recent_records)
+
+@admin_bp.route('/clear_records', methods=['POST'])
+def clear_records():
+    """
+    Clears all detection records from the database and removes all uploaded images.
+    Requires the administrator to be logged in.
+    """
+    if session.get('admin_logged_in') is None:
+        return redirect(url_for('admin.login'))
+        
+    try:
+        db = DatabaseManager()
+        db.clearAllRecords()
+        flash('All historical records and uploaded images have been successfully cleared.', 'success')
+    except Exception as e:
+        flash(f'An error occurred while clearing records: {str(e)}', 'error')
+        
+    return redirect(url_for('admin.dashboard'))

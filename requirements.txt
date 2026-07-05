@@ -1,8 +1,8 @@
 tensorflow==2.18.0
-mediapipe==0.10.14
 opencv-python==4.9.0.80
+mediapipe==0.10.14
+numpy==1.26.4
 flask==3.0.0
 python-dotenv==1.0.0
-numpy==1.26.4
 # Desktop App
-Pillow==10.2.0
+Pillow==10.2.0 # For image processing and manipulation

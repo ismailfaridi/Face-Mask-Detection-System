@@ -67,17 +67,14 @@
                 <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-white font-bold text-lg">
                     😷
                 </div>
-                <a href="{{ url_for('main.index') }}" class="font-bold text-xl tracking-tight hidden md:block">Face Mask
-                    Detector</a>
+                <a href="{{ url_for('main.index') }}" class="font-bold text-xl tracking-tight hidden md:block">Face Mask Detector</a>
             </div>
             <div class="flex items-center gap-6 text-sm font-medium">
                 {% if session.get('admin_logged_in') %}
-                <a href="{{ url_for('admin.dashboard') }}"
-                    class="hidden md:block hover:text-gray-800 transition">Dashboard</a>
+                <a href="{{ url_for('admin.dashboard') }}" class="hidden md:block hover:text-gray-800 transition">Dashboard</a>
                 <a href="{{ url_for('admin.logout') }}" class="hover:text-gray-800 transition">Logout</a>
                 {% else %}
-                <a href="{{ url_for('admin.login') }}"
-                    class="bg-black text-white px-5 py-2.5 rounded-full hover:bg-gray-800 transition transform hover:scale-105 active:scale-95 shadow-lg">Login</a>
+                <a href="{{ url_for('admin.login') }}" class="bg-black text-white px-5 py-2.5 rounded-full hover:bg-gray-800 transition transform hover:scale-105 active:scale-95 shadow-lg">Login</a>
                 {% endif %}
             </div>
         </div>

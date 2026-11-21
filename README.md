@@ -8,6 +8,8 @@ The project offers two simple interfaces to fit different needs: a **Flask web a
 
 This project was built by **Muhammad Ismail** as a **Final Year Project (FYP)** for the **Virtual University of Pakistan** under the course code **CS619**.
 
+![Face Mask Detection App](assets/FMDS%20App.jpg).
+
 ---
 
 ## 🚀 Key Features
@@ -87,22 +89,6 @@ The classification model was trained and evaluated using a custom dataset compil
 👉 **[Kaggle: Face Mask Detection Dataset](https://www.kaggle.com/datasets/ismailfaridi/face-mask-detection)**
 
 This dataset is a curated collection that combines image samples from various public sources. It has been consolidated, cleaned, and pre-processed into balanced face crops (with mask and without mask) designed specifically for training high-accuracy classification models.
-
----
-
-## 📊 Model Training & Performance
-
-The face mask classifier is built using transfer learning on **MobileNetV2** (pre-trained on ImageNet) and fine-tuned on the [Face Mask Detection Dataset](https://www.kaggle.com/datasets/ismailfaridi/face-mask-detection).
-
-### 📈 Training Curves
-Below is the training performance showing training and validation accuracy and loss trends over 10 epochs:
-
-![MobileNetV2 Training Performance](assets/fmds_mobilenetv2_training_performance.png)
-
-### 🧪 Evaluation Metrics
-The model was evaluated on a test set of 966 samples (balanced with 483 mask and 483 no-mask samples), achieving outstanding classification results:
-
-![Confusion Matrix & Metrics](assets/confusion-matrix_and_metrics.png)
 
 ---
 

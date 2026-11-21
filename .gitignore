@@ -3,3 +3,4 @@ app/static/uploads/
 venv/
 __pycache__/
 app/services/face_mask_detector_mobile-net-v2_model.keras
+Archive

@@ -1,8 +1,16 @@
+# Core ML / CV stack
 tensorflow==2.18.0
 opencv-python==4.9.0.80
 mediapipe==0.10.14
 numpy==1.26.4
+protobuf==4.25.3          # Required by mediapipe 0.10.14; prevents install/runtime errors
+
+# Web (Flask interface)
 flask==3.0.0
 python-dotenv==1.0.0
-# Desktop App
-Pillow==10.2.0 # For image processing and manipulation
+
+# Streamlit interface
+streamlit==1.39.0
+
+# Image processing (Flask, Desktop, and Streamlit)
+Pillow==10.2.0

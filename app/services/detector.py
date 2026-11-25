@@ -66,7 +66,7 @@ class CNNModel:
     """
     def __init__(self):
         self.IMG_SIZE = (224, 224) # MobileNetV2 standard input size
-        self.MODEL_PATH = os.path.join(os.path.dirname(__file__), 'face_mask_detector_mobile-net-v2_model.keras')
+        self.MODEL_PATH = os.path.join(os.path.dirname(__file__), 'face_mask_detector_mobilenetv2_model.keras')
 
         print('Loading CNN model from:', self.MODEL_PATH)
         self.cnnModel = tf.keras.models.load_model(self.MODEL_PATH, compile=False)
